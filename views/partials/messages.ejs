@@ -1,0 +1,8 @@
+<% if(typeof errors != 'undefined'){ %>
+    <% errors.forEach(function (error) { %> <%- include('error', {error: error.msg}); %> <% }); %>
+<% } %>
+
+<% if(success_msg != '') { %> <%- include('alert', {label: "success",text:success_msg}); %> <% } %>
+<% if(success != '') { %> <%- include('alert', {label: "success",text:success}); %> <% } %>
+<%- include('error', {error: error_msg}); %>
+<%- include('error', {error: error}); %>
