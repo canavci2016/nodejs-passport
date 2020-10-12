@@ -52,12 +52,7 @@ router.post('/login',
     successFlash: 'Welcome!',
     failureRedirect: '/users/login',
     failureFlash: true
-  }),
-  (req, res, next) => {
-    res.send("ddd");
-    console.log(req.user);
-
-  });
+  }));
 
 router.get('/logout', (req, res) => {
   req.logout();

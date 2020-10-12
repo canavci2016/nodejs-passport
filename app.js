@@ -65,4 +65,11 @@ app.use('/static', express.static('public'));
 app.use('/', require('./routes/index')); //index of routes
 app.use('/users', require('./routes/users')); //index of routes
 
+
+app.use(function (err, req, res, next) {
+  res.send("Hellow");
+  console.log(err);
+  // logic
+});
+
 app.listen(PORT, console.log(`Server started on ${PORT}`));
