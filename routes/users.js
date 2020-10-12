@@ -28,11 +28,19 @@ router.route('/register')
 
     bcrypt.genSalt(10, (err, salt) => bcrypt.hash(newUser.password, salt, (err, hash) => {
       if (err) throw err;
-      newUser.password = hash;
-      newUser.save().then(() => {
-        req.flash("success_msg", "You are now registered and can log in");
-        res.redirect('/users/login');
-      }).catch((error) => console.log(error));
+
+      (async function () {
+        try {
+          newUser.password = hash;
+          await newUser.save();
+          req.flash("success_msg", "You are now registered and can log in");
+          res.redirect('/users/login');
+        } catch (e) {
+          req.flash("error_msg", "Hata oluştu :" + e.message);
+          res.redirect('/users/register');
+        }
+      })();
+
     }));
 
   });
