@@ -24,26 +24,16 @@ router.route('/register')
       return res.render('register', {errors, name, email, password, password2});
     }
 
+    const newUser = new User({name, email, password});
 
-    User.findOne({email}).then(user => {
-      if (user) {
-        errors.push({msg: "Email is already registered"});
-        res.render('register', {errors, name, email, password, password2});
-      } else {
-        const newUser = new User({name, email, password});
-        bcrypt.genSalt(10, (err, salt) => bcrypt.hash(newUser.password, salt, (err, hash) => {
-          if (err) throw err;
-          newUser.password = hash;
-          newUser.save()
-            .then(() => {
-              req.flash("success_msg", "You are now registered and can log in");
-              res.redirect('/users/login');
-            })
-            .catch((error) => console.log(error));
-        }));
-      }
-
-    });
+    bcrypt.genSalt(10, (err, salt) => bcrypt.hash(newUser.password, salt, (err, hash) => {
+      if (err) throw err;
+      newUser.password = hash;
+      newUser.save().then(() => {
+        req.flash("success_msg", "You are now registered and can log in");
+        res.redirect('/users/login');
+      }).catch((error) => console.log(error));
+    }));
 
   });
 
