@@ -7,8 +7,8 @@ module.exports = class Validation {
     return body(field);
   }
 
-  validate(rules, options) {
-    return [...rules, this.nextRoute(options)];
+  validate(rules, exceptionClassName) {
+    return [...rules, this.nextRoute(exceptionClassName)];
   }
 
   nextRoute(exceptionClassName = AvciError) {
