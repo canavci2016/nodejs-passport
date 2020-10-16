@@ -14,7 +14,7 @@ router.get('/login', (req, res) => res.render('login'));
 
 router.route('/register')
   .get((req, res) => res.render('register'))
-  .post(registerValidation({json: false}), (req, res) => {
+  .post(registerValidation.validate({json: false}), (req, res) => {
 
     const {name, email, password, password2} = req.body;
 

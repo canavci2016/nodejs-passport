@@ -1,44 +1,30 @@
-const {body, validationResult} = require('express-validator');
 const User = require("../../models/User");
+const Validation = require("../Validation");
 
-module.exports = function (options) {
+class Register extends Validation {
 
-  const validations = [
-    body('name').trim().not().isEmpty(),
-    body('email').trim().not().isEmpty().isEmail()
-      .custom(email => {
+  validate(options) {
+
+    const rules = [
+      super.body('name').trim().not().isEmpty(),
+      super.body('email').trim().not().isEmpty().isEmail().custom(email => {
         return User.findOne({email}).then(user => {
-          if (user) {
-            return Promise.reject('E-mail already in use');
-          }
+          if (user) return Promise.reject('E-mail already in use');
         });
       }),
-    body('password').isLength({min: 5}).custom((value, {req}) => {
-      if (value !== req.body.password2) throw new Error('Password confirmation does not match password');
+      super.body('password').isLength({min: 5}).custom((value, {req}) => {
+        if (value !== req.body.password2) throw new Error('Password confirmation does not match password');
 
-      return true;
-    }),
-    body('password2').isLength({min: 5})
-  ];
+        return true;
+      }),
+      super.body('password2').isLength({min: 5})
+    ];
 
-  return [
-    ...validations,
-    function (req, res, next) {
+    return super.validate(rules, options);
+  }
 
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        if (typeof options != 'undefined') {
-          const {json} = options;
-          if (json) {
-            return res.status(400).json({errors: errors.array()});
-          }
-        }
-      }
+}
 
-      req.avciErrors = errors.array();
+const register = new Register();
 
-      next();
-    }
-  ];
-
-};
+module.exports = register;
