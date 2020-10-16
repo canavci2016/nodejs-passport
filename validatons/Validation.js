@@ -1,4 +1,5 @@
 const {body, validationResult} = require('express-validator');
+const AvciError = require("./error/Avci");
 
 module.exports = class Validation {
 
@@ -10,22 +11,11 @@ module.exports = class Validation {
     return [...rules, this.nextRoute(options)];
   }
 
-  nextRoute(options) {
+  nextRoute(exceptionClassName = AvciError) {
     return (req, res, next) => {
       const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        if (typeof options != 'undefined') {
-          const {json} = options;
-          if (json) {
-            return res.status(400).json({errors: errors.array()});
-          }
-        }
-      }
-
-      req.avciErrors = errors.array();
-
-      next();
+      return !errors.isEmpty() ? exceptionClassName.format(errors, req, res, next) : next();
     };
   }
-  
+
 };

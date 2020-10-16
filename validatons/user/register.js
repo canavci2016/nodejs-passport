@@ -3,7 +3,7 @@ const Validation = require("../Validation");
 
 class Register extends Validation {
 
-  validate(options) {
+  validate(exceptionClassName) {
 
     const rules = [
       super.body('name').trim().not().isEmpty(),
@@ -20,7 +20,7 @@ class Register extends Validation {
       super.body('password2').isLength({min: 5})
     ];
 
-    return super.validate(rules, options);
+    return super.validate(rules, exceptionClassName);
   }
 
 }

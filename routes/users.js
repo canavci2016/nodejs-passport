@@ -3,6 +3,7 @@ const router = express.Router();
 var bcrypt = require("bcryptjs");
 var passport = require("passport");
 var registerValidation = require("../validatons/user/register");
+var ValidationExceptionCLass = require("../validatons/error/Avci");
 
 
 // user model
@@ -14,7 +15,7 @@ router.get('/login', (req, res) => res.render('login'));
 
 router.route('/register')
   .get((req, res) => res.render('register'))
-  .post(registerValidation.validate({json: false}), (req, res) => {
+  .post(registerValidation.validate(ValidationExceptionCLass), (req, res) => {
 
     const {name, email, password, password2} = req.body;
 
