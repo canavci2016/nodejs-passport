@@ -6,22 +6,16 @@ const session = require("express-session");
 const passport = require("passport");
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
 
 // Passport initialize
 require("./config/passport")(passport);
 
 
-const PORT = process.env.PORT || 5000;
-
-// DB config
+// DB config -  Connect to Mongo
 const db = require("./config/keys").MongoURI;
-
-// Connect to Mongo
-mongoose.connect(db, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => console.log("connected")).catch((e => console.log(e)));
+mongoose.connect(db, {useNewUrlParser: true, useUnifiedTopology: true}).catch((e => console.log(e)));
 
 
 // EJS
@@ -66,9 +60,17 @@ app.use('/', require('./routes/index')); //index of routes
 app.use('/users', require('./routes/users')); //index of routes
 
 
+app.get('/readFile/:user', function (req, res, next) {
+  res.message("wad");
+
+  Promise.resolve().then(function () {
+    throw new Error('BROKEN');
+  }).catch(next); // Errors will be passed to Express.
+});
+
 app.use(function (err, req, res, next) {
-  res.send("Hellow");
-  console.log(err);
+  res.status(err.status || 500);
+  res.send('Hata oluştu');
   // logic
 });
 
