@@ -20,10 +20,8 @@ module.exports = class User {
     });
   }
 
-
   create(name, email, password) {
-    const newUser = new UserModel({name, email, password});
-    return newUser.save();
+    return new UserModel({name, email, password}).save();
   }
 
 };
