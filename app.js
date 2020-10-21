@@ -4,10 +4,10 @@ const mongoose = require("mongoose");
 const flash = require("connect-flash");
 const session = require("express-session");
 const passport = require("passport");
+const RouteLoaders = require("./loaders/Route");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-
 
 // Passport initialize
 require("./config/passport")(passport);
@@ -56,8 +56,12 @@ app.use('/static', express.static('public'));
 
 
 // ROUTES
+new RouteLoaders(app);
 app.use('/', require('./routes/index')); //index of routes
 app.use('/users', require('./routes/users')); //index of routes
+
+
+app.resource('/ccs', require('./controllers/TestResourceController')); //index of routes
 
 
 app.get('/readFile/:user', function (req, res, next) {
