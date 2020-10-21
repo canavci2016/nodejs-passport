@@ -48,8 +48,6 @@ app.use((req, res, next) => {
 
 //Body Parser
 app.use(express.urlencoded({extended: true}));
-
-
 // STATIC DIRECTORY
 app.use(express.static('public'));
 app.use('/static', express.static('public'));
@@ -61,7 +59,7 @@ app.use('/', require('./routes/index')); //index of routes
 app.use('/users', require('./routes/users')); //index of routes
 
 
-app.resource('/ccs', require('./controllers/TestResourceController')); //index of routes
+app.resource('/ccs', require('./controllers/TestResourceController'),'test'); //index of routes
 
 
 app.get('/readFile/:user', function (req, res, next) {
