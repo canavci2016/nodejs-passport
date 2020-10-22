@@ -24,4 +24,18 @@ module.exports = class User {
     return new UserModel({name, email, password}).save();
   }
 
+  async findByCrypte(email, password) {
+    const user = await UserModel.findOne({email});
+    if (!user) throw new Error("that email is not registered");
+
+    let crypt = await bcrypt.compare(password, user.password);
+    if (!crypt) throw new Error("password is incorrect");
+
+    return user;
+  }
+
+  findById(id, callback) {
+    return UserModel.findById(id, callback);
+  }
+
 };
