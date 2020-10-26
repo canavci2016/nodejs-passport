@@ -11,4 +11,10 @@ module.exports = function (app) {
             throw new Error('BROKEN');
         }).catch(next); // Errors will be passed to Express.
     });
+
+    app.use(function (err, req, res, next) {
+        res.status(err.status || 500);
+        res.send('Hata oluştu');
+        // logic
+    });
 }

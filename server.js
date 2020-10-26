@@ -15,7 +15,6 @@ class Server {
         this.db();
         this.middleware();
         this.routes();
-        this.exceptionHandler();
     }
 
     db() {
@@ -49,25 +48,16 @@ class Server {
             next();
         });
 
-
         //Body Parser
         this.app.use(express.urlencoded({ extended: true }));
         // STATIC DIRECTORY
-        this.app.use(express.static('public'));
-        this.app.use('/static', express.static('public'));
+        this.app.use(express.static('public')); // or this.app.use('/static', express.static('public'));
+
         new RouteLoaders(this.app);
     }
 
     routes() {
         require("./routes/index")(this.app);
-    }
-
-    exceptionHandler() {
-        this.app.use(function (err, req, res, next) {
-            res.status(err.status || 500);
-            res.send('Hata oluştu');
-            // logic
-        });
     }
 }
 
